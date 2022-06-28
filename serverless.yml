@@ -1,0 +1,11 @@
+service: bingo-bot
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  newGame:
+    handler: src/functions/startGame.newGame
