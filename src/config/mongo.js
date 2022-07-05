@@ -1,6 +1,10 @@
 const mongodb = require('mongodb');
- 
-const uri = 'mongodb://localhost:27017';
+
+const Settings = require('../config/settings');
+
+
+const settings = new Settings(); 
+const uri = settings.mongoUrl;
 
 const client = new mongodb.MongoClient(uri, {
   useNewUrlParser: true,

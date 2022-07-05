@@ -1,16 +1,18 @@
+const logger = require('../config/logger')
 const mongo = require('../config/mongo');
 
 const create = async () => {
   try {
     const db = await mongo.connect();
 
-    await db.collection('games').insertOne({
+    const game = await db.collection('games').insertOne({
       date: new Date(),
+      status: 'open'
     });
 
-    console.log('jogo criado!')
+    return game;
   } catch (error) {
-    console.log(error)
+    logger.error('An error occurred', error)
   } finally {
     mongo.close();
   }
@@ -24,12 +26,11 @@ const getAll = async (filter={}) => {
 
     return games;
   } catch (error) {
-    console.log(error)
+    logger.error('An error occurred', error)
   } finally {
     mongo.close();
   }
 }
-
 
 module.exports = {
   create,
