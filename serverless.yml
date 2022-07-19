@@ -9,3 +9,5 @@ provider:
 functions:
   newGame:
     handler: src/functions/startGame.newGame
+  joinGame:
+    handler: src/functions/joinGame.run

@@ -24,7 +24,23 @@ const getAll = async (filter={}) => {
 
     const games = await db.collection('games').find(filter).toArray();
 
-    return games;
+    return games || [];
+  } catch (error) {
+    logger.error('An error occurred', error)
+  } finally {
+    mongo.close();
+  }
+}
+
+const update = async (id, data) => {
+  try {
+    const db = await mongo.connect();
+
+    const game = await db.collection('games').updateOne({ _id: id }, {
+      $set: data
+    });
+
+    return game;
   } catch (error) {
     logger.error('An error occurred', error)
   } finally {
@@ -35,4 +51,5 @@ const getAll = async (filter={}) => {
 module.exports = {
   create,
   getAll,
+  update,
 };
