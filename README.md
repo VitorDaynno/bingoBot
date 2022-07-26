@@ -19,3 +19,9 @@ Add players
 ```bash
 serverless invoke local --function joinGame --data '["player1", "player2"]'
 ```
+
+Run
+
+```bash
+serverless invoke local --function drawNumber
+```

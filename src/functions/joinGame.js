@@ -28,7 +28,7 @@ const createCard = (player) => {
 
   const card = generateCard();
 
-  return { player, card};
+  return { player, card, drawNumber: []};
 }
 
 const generateCard = () => {

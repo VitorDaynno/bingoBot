@@ -11,3 +11,5 @@ functions:
     handler: src/functions/startGame.newGame
   joinGame:
     handler: src/functions/joinGame.run
+  drawNumber:
+    handler: src/functions/drawNumber.draw
