@@ -7,7 +7,8 @@ const create = async () => {
 
     const game = await db.collection('games').insertOne({
       date: new Date(),
-      status: 'open'
+      drawnNumbers: [],
+      status: 'open',
     });
 
     return game;

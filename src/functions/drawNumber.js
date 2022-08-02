@@ -24,7 +24,7 @@ const drawNumber = (game) => {
   const number = Math.floor(Math.random() * (max - min)) + min;
 
   if (drawnNumbers.includes(number)) {
-    logger.info('number already drawn: ', number);
+    logger.info('number already drawn: %s', number);
 
     return drawNumber(game);
   }
@@ -32,20 +32,26 @@ const drawNumber = (game) => {
   return number;
 }
 
-const shareNumber = (game, number) => {
-  const { players } = game;
+const shareNumber = async (game, number) => {
+  logger.info('The number drawn was %s', number);
+  const { _id, players, drawnNumbers } = game;
 
   for(const player of players) {
     const { card } = player;
 
     if (card.includes(number)) {
+      logger.info('The player %s has the number', player.player)
       player.drawnNumbers.push(number);
 
-      if (card.length === player.drawNumber.length) {
+      if (card.length === player.drawnNumbers.length) {
         logger.info('Player %s won', player.player);
+        player.isWinner = true;
       }
     }
   }
 
-  //TODO: update the game
+  await gameDAO.update(
+    _id,
+    { players, drawnNumbers: [...drawnNumbers, number]}
+  );
 }
