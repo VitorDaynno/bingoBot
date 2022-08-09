@@ -11,7 +11,8 @@ module.exports.draw = async () => {
 
   const number = drawNumber(game);
 
-  shareNumber(game, number);
+  // shareNumber(game, number);
+  verifyWinners(game);
 }
 
 const drawNumber = (game) => {
@@ -54,4 +55,9 @@ const shareNumber = async (game, number) => {
     _id,
     { players, drawnNumbers: [...drawnNumbers, number]}
   );
+}
+
+const verifyWinners = async (game) => {
+  const winners = await gameDAO.getWinners(game._id);
+
 }
