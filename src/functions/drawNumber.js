@@ -1,5 +1,6 @@
 const logger = require('../config/logger');
 const gameDAO = require('../daos/gameDAO');
+const rankingDAO = require('../daos/rankingDAO');
 
 module.exports.draw = async () => {
   const game = (await gameDAO.getAll({status: 'open'}))[0];
@@ -11,7 +12,7 @@ module.exports.draw = async () => {
 
   const number = drawNumber(game);
 
-  // shareNumber(game, number);
+  shareNumber(game, number);
   verifyWinners(game);
 }
 
@@ -60,4 +61,11 @@ const shareNumber = async (game, number) => {
 const verifyWinners = async (game) => {
   const winners = await gameDAO.getWinners(game._id);
 
+  const updateWinners = winners.map((winner) => {
+    rankingDAO.saveWinner(winner.name, winner.profileName, winner._id);
+  });
+
+  Promise.all(updateWinners);
+
+  await gameDAO.update(game._id, { status: 'closed' });
 }
