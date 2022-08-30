@@ -7,7 +7,8 @@ const create = async () => {
 
     const game = await db.collection('games').insertOne({
       date: new Date(),
-      status: 'open'
+      drawnNumbers: [],
+      status: 'open',
     });
 
     return game;
@@ -48,8 +49,34 @@ const update = async (id, data) => {
   }
 }
 
+const getWinners = async (id) => {
+  try {
+    const db = await mongo.connect();
+
+    const cursor = db.collection('games').aggregate([
+      { $match: {_id: id, status: 'open'} },
+      { $unwind: '$players'},
+      { $project: { name: '$players.player', isWinner: '$players.isWinner' }},
+      { $match: { isWinner: true }},
+    ]);
+
+    const winners = [];
+
+    for await (const player of cursor) {
+      winners.push({...player});
+    }
+
+    return winners;
+  } catch (error) {
+    logger.error('An error occurred', error)
+  } finally {
+    mongo.close();
+  }
+}
+
 module.exports = {
   create,
   getAll,
   update,
+  getWinners,
 };
